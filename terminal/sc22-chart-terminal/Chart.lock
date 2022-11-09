@@ -1,0 +1,15 @@
+dependencies:
+- name: cert-manager
+  repository: https://charts.jetstack.io
+  version: v1.10.0
+- name: influxdb
+  repository: https://helm.influxdata.com/
+  version: 4.12.0
+- name: kube-prometheus-stack
+  repository: https://prometheus-community.github.io/helm-charts
+  version: 41.7.0
+- name: fluent-bit
+  repository: https://fluent.github.io/helm-charts
+  version: 0.20.9
+digest: sha256:de0e3fabee0b07f29c4be297859784050b5df5ba5dffbd3e80f8ba31628bcf65
+generated: "2022-11-09T14:18:10.985674-06:00"
