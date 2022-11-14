@@ -59,6 +59,10 @@ fluent-bit:
 influxdb:
   nodeSelector:
     demo: terminal
+  service:
+    type: NodePort
+    nodePorts:
+      http: 32086
   image:
     tag: "1.8"
   persistence:
@@ -70,12 +74,16 @@ influxdb:
     enabled: true
     scripts:
       init.iql: |+
-        CREATE DATABASE "waggledemo"; CREATE DATABASE "prometheus"
+        CREATE DATABASE "waggledemo"; CREATE DATABASE "prometheus";CREATE DATABASE "waggle"
 
 prometheus:
   nodeSelector:
     demo: terminal
   grafana:
+  #  service:
+  #    type: NodePort
+  #    nodePorts:
+  #      http: 32080
     nodeSelector:
       demo: terminal
     adminPassword: notsecret
@@ -84,7 +92,12 @@ prometheus:
       storageClassName: "local-path"
       accessModes:
         - ReadWriteOnce
-      size: 3Gi     
+      size: 3Gi
+    extraVolumeMounts:
+      - name: image0
+        mountPath: /mnt
+        readOnly: true
+        hostPath: /tmp
     additionalDataSources:
       - name: InfluxDB-Waggle 
         type: influxdb

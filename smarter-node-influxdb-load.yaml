@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: smarter-node-influxdb-loader
+  namespace: smarter
+spec:
+  selector:
+    matchLabels:
+      app: smarter-node-influxdb-loader
+  template:
+    metadata:
+      labels:
+        app: smarter-node-influxdb-loader
+    spec:
+      hostAliases:
+        - ip: "10.31.81.248"
+          hostnames:
+          - "reterm.local"
+      nodeSelector:
+        node-role.kubernetes.io/master: "true"
+      containers:
+      - image: waggle/node-influxdb-loader:0.0.1
+        name: smarter-node-influxdb-loader
+        resources:
+          limits:
+            cpu: 100m
+            memory: 150Mi
+          requests:
+            cpu: 50m
+            memory: 100Mi
+        ports:
+        - name: metrics
+          containerPort: 8080
+        env:
+        - name: RABBITMQ_HOST
+          value: "wes-rabbitmq.default.svc.cluster.local"
+        - name: RABBITMQ_PORT
+          value: "5672"
+        - name: RABBITMQ_USERNAME
+          value: "service"
+        - name: RABBITMQ_PASSWORD
+          value: "service"
+        - name: RABBITMQ_EXCHANGE
+          value: "data.topic"
+        - name: INFLUXDB_URL
+          value: "http://10.31.81.248.nip.io:32086"
+        - name: INFLUXDB_BUCKET
+          value: "waggledemo"
+        - name: INFLUXDB_TOKEN
+          value: ""
+
